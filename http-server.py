@@ -53,11 +53,14 @@ def verify_password(username, password):
 @auth.login_required
 async def upload_file(request):
     upload_file = request.files.get('file')
-
+    print("Received new file named: " + upload_file.name)
     if upload_file is not None:
         filename = secure_filename(upload_file.name)
         file_path = '/files/' + filename
         if valid_file_size(upload_file.body):
+            print("The filename is valid, the file will be saved at: " + file_path)
             await write_file(file_path, upload_file.body)
+        else:
+            print("The filename is invalid, the file will not be saved!")
 
     return response.json(True)
